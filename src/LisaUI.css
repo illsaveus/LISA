@@ -1,0 +1,220 @@
+@font-face
+{
+    font-family: "Blanch Condensed";
+    src: url("ui/BLANCH_CONDENSED.otf");
+}
+
+@font-face
+{
+    font-family: "League Gothic";
+    src: url("/ui/LeagueGothic-Regular.otf");
+}
+
+.root{
+    -fx-font-size: 16pt;
+    -fx-font-family: "Serif";
+    -fx-base: #fff9ef;
+    -fx-background: #fff9ef;
+    /*-fx-padding: 10 10 10 100;*/
+}
+
+/*TOP MENU BUTTONS*/
+.inventory-btn{
+    -fx-background-size: 228, 78;
+    -fx-min-height: 78px;
+    -fx-min-width: 228px;
+    -fx-background-repeat: no-repeat;
+    -fx-padding: 0 0 0 10;
+}
+#inventory-open{
+    -fx-background-image: url("/ui/button-inventory-selected.jpg");
+}
+
+#inventory-closed{
+    -fx-background-image: url("/ui/button-inventory-inactive.jpg");
+}
+
+.recipes-btn{
+    -fx-background-size: 174, 78;
+    -fx-min-height: 78px;
+    -fx-min-width: 174px;
+    -fx-background-repeat: no-repeat;
+    -fx-padding: 0 0 0 0;
+}
+
+#recipes-open{
+    -fx-background-image: url("/ui/button-recipes-selected.jpg");
+}
+
+#recipes-closed{
+    -fx-background-image: url("/ui/button-recipes-inactive.jpg");
+}
+
+/*INVENTORY PAGE STYLES*/
+
+.header-item {
+    -fx-font-size: 20pt;
+    -fx-font-family: "League Gothic";
+
+
+}
+
+.progress-bar {
+
+    -fx-fill: #82a253;
+}
+
+.progress-bar-bg {
+    -fx-fill: #413e41;
+}
+
+/*RECIPE PAGE STYLES*/
+.recipe-name, .mealType-label {
+    -fx-font-size: 30pt;
+    -fx-font-family: "Blanch Condensed";
+    visibility: hidden;
+    -fx-text-fill: #ffffff;
+    -fx-min-height: 300;
+    -fx-text-alignment: center;
+    -fx-padding: 0 0 0 0;
+
+}
+
+.mealType-label {
+    visibility: visible;
+    -fx-min-height: 300px;
+    -fx-font-size: 60pt;
+    -fx-font-family: "League Gothic";
+    -fx-padding: 0 0 0 0;
+    -fx-max-width: 600px;
+}
+
+.mealType-bg {
+    -fx-background-size: 600, 300;
+    -fx-min-height: 300px;
+    -fx-min-width: 600px;
+    -fx-max-width: 600px;
+    -fx-padding: 0 0 0 0;
+
+
+}
+
+.mealType-bgcolor {
+    -fx-background-color: #82a253;
+    -fx-padding: 0 0 0 0;
+    -fx-min-height: 300px;
+    -fx-min-width: 600px;
+    -fx-max-width: 600px;
+    visibility: hidden;
+}
+
+#mealType-bgcolor-active {
+    visibility: visible;
+
+}
+
+#mealType-bgcolor-inactive {
+    visibility: hidden;
+}
+
+
+.recipe-name-bg {
+    -fx-min-height: 300;
+    -fx-min-width: 300;
+    -fx-background-color: #82a253;
+    visibility: hidden;
+}
+
+#recipe-name-bg-active {
+    visibility: visible;
+
+}
+
+#recipe-name-bg-inactive {
+    visibility: hidden;
+}
+
+
+
+#recipeItem-active {
+
+        visibility: visible;
+}
+
+#recipeItem-inactive {
+    /*visibility: hidden;*/
+}
+
+.recipe-button {
+    -fx-start-margin: 50;
+    -fx-end-margin: 150;
+    -fx-min-height: 300px;
+    -fx-min-width: 300px;
+    -fx-background-size: 300, 300;
+}
+
+.instructions-title {
+    -fx-font-size: 40pt;
+    -fx-font-family: "League Gothic";
+    -fx-text-fill: white;
+    -fx-min-height: 200px;
+    -fx-text-alignment: center;
+}
+
+.instructions-header-overlay {
+    -fx-background-color: black;
+    -fx-min-height: 200px;
+    -fx-min-width: 600px;
+    -fx-opacity: 0.5;
+}
+
+.Instructions-header, .ingredient-items {
+    -fx-font-size: 30pt;
+    -fx-font-family: "League Gothic";
+
+}
+
+.instructions-header-img {
+    -fx-min-height: 200;
+    -fx-min-width: 600;
+    -fx-background-size: 600, 200;
+    -fx-background-position: center;
+}
+
+.ingredient-items{
+    -fx-font-size: 20pt;
+}
+
+
+/*PRETTY BUTTON FOR USE ON RECIPE COMPLETED ACTIONS*/
+#record-sales {
+    -fx-padding: 8 15 15 15;
+    -fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;
+    -fx-background-radius: 30;
+    -fx-background-color:
+            linear-gradient(from 0% 93% to 0% 100%, #5c7239 0%, #5c7239 100%),
+            #82a253,
+            #82a253,
+            radial-gradient(center 50% 50%, radius 100%, #82a253, #82a253);
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.75) , 4,0,0,1 );
+    -fx-font-weight: bold;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: white;
+
+    -fx-font-family: "League Gothic";
+}
+#record-sales:hover {
+    -fx-background-color:
+            linear-gradient(from 0% 93% to 0% 100%, #5c7239 0%, #5c7239 100%),
+            #5c7239,
+            #82a253,
+            radial-gradient(center 50% 50%, radius 100%, #91B35D, #91B35D);
+}
+#record-sales:pressed {
+    -fx-padding: 10 15 13 15;
+    -fx-background-insets: 2 0 0 0,2 0 3 0, 2 0 4 0, 2 0 5 0;
+}
+#record-sales Text {
+    -fx-text-fill: white;
+    -fx-effect: dropshadow( gaussian , #a30000 , 0,0,0,2 );
+}
