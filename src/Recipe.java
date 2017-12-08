@@ -5,11 +5,12 @@ import java.util.Scanner;
 
 public class Recipe {
     String ID;
-    private String name;
-    private ArrayList<Ingredient> ingredients;
-    private String image;
-    private String mealType;
-    private static String instructions;
+     String name;
+     ArrayList<Ingredient> ingredients;
+     ArrayList<Recipe> recipes;
+     String image;
+     String mealType;
+      String instructions;
     String prep_time;
     String cook_time;
     String ready_time;
@@ -65,7 +66,7 @@ public class Recipe {
 
     ArrayList<Ingredient> getIngredients () { return this.ingredients; }
 
-    String getImage () { return this.image; }
+    String getImage () { return "/recipes/imgs/" + this.image + ".jpg"; }
 
     void addIngredients(ArrayList<Ingredient> i){
         this.ingredients = i;
@@ -75,10 +76,12 @@ public class Recipe {
     String getMealType () { return this.mealType;}
 
     //String getInstructions() { return this.instructions; }
-    public static String getInstructions(){
+    public String getInstructions(){
         String output = "";
+
         try{
-            Scanner scanner = new Scanner(new File(instructions + ".txt"));
+            System.out.println(instructions);
+            Scanner scanner = new Scanner(new File(instructions));
 
             while(scanner.hasNext()){
                 //System.out.println(scanner.nextLine() + "\n");
@@ -103,35 +106,9 @@ public class Recipe {
 
 
 
-    public ArrayList<Recipe> getRecipes(Connection conn, String mealType) {
-        ArrayList<Recipe> recipes = new ArrayList<>();
-        String ingIDSQLList = "(";
-        String sqlQuery = "select recipe_id, name, mealtype from recipes where mealtype = ?";
 
-        PreparedStatement getRcps = null;
 
-        try {
-            getRcps = conn.prepareStatement(sqlQuery);
-            getRcps.setString(1, mealType);
 
-            ResultSet rs = getRcps.executeQuery();
 
-            while (rs.next()) {
-                Recipe rcp = new Recipe();
-                String ingQuery = "select name, type, qty\n" +
-                        "  from ingredients inner join ingredients_needed\n" +
-                        "  where recipe_id = ?;";
-
-                int rcpID = rs.getInt("recipe_id");
-                PreparedStatement getIngs = conn.prepareStatement(ingQuery);
-                getIngs.setInt(1, rcpID);
-            }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-
-        return recipes;
-    }
 }
 

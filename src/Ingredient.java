@@ -42,9 +42,19 @@ class Ingredient{
         return max;
     }
 
+    double getAmount(){
+        return this.min;
+    }
+
     public String getMeasuringType(){
         return measuringType;
     }
+
+    public void setAmount(double newAmount) {
+        Double namount = newAmount;
+        this.min = namount;
+    }
+
 }
 
 

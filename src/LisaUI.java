@@ -37,6 +37,7 @@ public class LisaUI {
     private ArrayList<Recipe> recipes;
     private ArrayList<Ingredient> inventory;
     private Inventory inventoryClass;
+    private RecipeDB recipeDB;
 
     private Connection conn;
     public static String network = "192.185.5.33:3306";
@@ -173,27 +174,32 @@ public class LisaUI {
         return  (item.getMin() / item.getMax()) * width;
     }
 
+
     //This method returns the recipePage layout UI with all the inventory objects added to it
     //It takes an ArrayList of recipes and a String of mealType to filter results with
-    public VBox getRecipesPage(String userChoice){
+    public VBox getRecipesPage(int userChoice){
         recipesPage = new VBox(); //create a layout for the inventory UI
-        /*
-        recipes = inventoryClass.getRecipes(conn, "1");
-        int length = recipes.size(); //get size of arrayList
 
+
+        recipes = new ArrayList<Recipe>();
+
+        recipeDB = new RecipeDB(userChoice);
+
+        recipes = recipeDB.returnRecipes();
+
+        int length = recipes.size(); //get size of arrayList
+        System.out.println("l " + length);
 
         //loop through the arrayList to add objects to the layout
         for(int i = 0; i < length; i++){
             HBox recipeRow = new HBox();
-            System.out.println("creating a new recipe row. i is now " +  i);
+            //System.out.println("creating a new recipe row. i is now " +  i);
 
             for(int rowCount = 0; rowCount < 2; ) {
                 if(i >= length )
                     break;
-                String pulledType = recipes.get(i).getMealType();
-                System.out.println("grabbing item : " +  pulledType + " i : " + i + " rowCount : " + rowCount);
 
-                if(pulledType == userChoice) {
+
 
                     //stack the name and photo on top of each other in this object
                     StackPane singleRecipe = new StackPane();
@@ -223,6 +229,11 @@ public class LisaUI {
                     image.getStyleClass().add("recipe-button");
                     String style = "-fx-background-image: url('" + recipes.get(i).getImage() + "');";
                     image.setStyle(style);
+
+
+                    image.getStyleClass().add("recipe-button");
+
+
                     itemNamePane.setOnMouseEntered(e -> {
 
                         itemName.setId("recipeItem-active");
@@ -255,7 +266,7 @@ public class LisaUI {
                     if(rowCount > 1){
                         recipesPage.getChildren().add(recipeRow);
 
-                        System.out.println("Made a row and added it");
+                        //System.out.println("Made a row and added it");
 
                     } else {
                         i++;
@@ -264,17 +275,14 @@ public class LisaUI {
 
                     //recipesPage.getChildren().add(singleRecipe);
                     //recipesPage.getChildren().add(image);
-                } else {
-                    System.out.println(pulledType + " is not a matche of " +  userChoice);
-                    i++;
-                }
+
             }
 
         }
 
 
         recipesPage.setPadding(new Insets (20, 35, 20, 35));
-*/
+
 
         return recipesPage;
     }
@@ -381,7 +389,7 @@ public class LisaUI {
                 breakfastBGcolor.setId("mealType-bgcolor-inactive");
             });
 
-            breakfastBox.setOnMouseClicked(e -> window.setCenter(getRecipesPage("breakfast")));
+            breakfastBox.setOnMouseClicked(e -> window.setCenter(getRecipesPage(1)));
 
             breakfastBox.getChildren().addAll(breakfastPadding1, breakfastLable, breakfastPadding2);
             breakfastPane.getChildren().addAll(breakfastBG, breakfastBGcolor, breakfastBox);
@@ -417,7 +425,7 @@ public class LisaUI {
                 lunchBGcolor.setId("mealType-bgcolor-inactive");
             });
 
-        lunchBox.setOnMouseClicked(e -> window.setCenter(getRecipesPage("lunch")));
+        lunchBox.setOnMouseClicked(e -> window.setCenter(getRecipesPage(2)));
 
             lunchBox.getChildren().addAll(lunchPadding1, lunchLable, lunchPadding2);
             lunchPane.getChildren().addAll(lunchBG, lunchBGcolor, lunchBox);
@@ -453,7 +461,7 @@ public class LisaUI {
                 dinnerBGcolor.setId("mealType-bgcolor-inactive");
             });
 
-            dinnerBox.setOnMouseClicked(e -> window.setCenter(getRecipesPage("lunch")));
+            dinnerBox.setOnMouseClicked(e -> window.setCenter(getRecipesPage(2)));
 
             dinnerBox.getChildren().addAll(dinnerPadding1, dinnerLable, dinnerPadding2);
             dinnerPane.getChildren().addAll(dinnerBG, dinnerBGcolor, dinnerBox);
@@ -472,14 +480,14 @@ public class LisaUI {
         bButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 System.out.println("bButton clicked");
-                window.setCenter(getRecipesPage("breakfast"));
+                window.setCenter(getRecipesPage(1));
             }
         });
 
         lButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 System.out.println("lButton clicked");
-                window.setCenter(getRecipesPage("lunch"));
+                window.setCenter(getRecipesPage(2));
 
 
             }
@@ -488,7 +496,7 @@ public class LisaUI {
         dButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 System.out.println("dButton clicked");
-                window.setCenter(getRecipesPage("dinner"));
+                window.setCenter(getRecipesPage(3));
 
             }
         });
@@ -504,7 +512,7 @@ public class LisaUI {
         StackPane header = new StackPane();
         HBox txtHolder = new HBox();
         //Recipe recipeTest = recipeList.get(0);
-        String rName = beautifyText(recipeChoice.getName().toUpperCase());
+        String rName = recipeChoice.getName().toUpperCase();
 
         String instructionsHeaderImg = "-fx-background-image: url('" + recipeChoice.getImage() + "');";
         //Image rImage = new Image(recipeChoice.getImage());
@@ -569,13 +577,15 @@ public class LisaUI {
         VBox instructArea = new VBox();
         Label instructLabel = new Label("INSTRUCTIONS");
         instructLabel.getStyleClass().add("Instructions-header");
+
         HBox instructPara = new HBox();
         //add recipe instructions to instructPara
-        Label instructText = new Label(recipeChoice.getInstructions());
-        instructText.setMaxWidth(600); //set width to a portion of window size
-        instructText.setWrapText(true);
+        Text instructText = new Text(recipeChoice.getInstructions());
+        instructText.setWrappingWidth(600);
+        //instructText.setMaxWidth(600); //set width to a portion of window size
+        //instructText.setWrapText(true);
         instructArea.getChildren().addAll(instructLabel, instructPara, instructText);
-
+        instructText.getStyleClass().add("Instructions-text");
 
         HBox bottomPart = new HBox();
         Region filler1 = new Region();
@@ -583,12 +593,13 @@ public class LisaUI {
 
         bottomPart.setHgrow(filler1, Priority.ALWAYS);
         bottomPart.setHgrow(filler2, Priority.ALWAYS);
-        Button finished = new Button("finished");
+        Button finished = new Button("Finished");
 
         finished.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
 
                 System.out.println("finished with the recipe");
+                updateInventory(recipeChoice);
                 inventoryBtnClicked(); //change to inventory page
             }
         });
@@ -601,5 +612,12 @@ public class LisaUI {
         instructPg.setPadding(new Insets (20, 35, 20, 35));
 
         window.setCenter(instructPg);
+    }
+
+    void updateInventory(Recipe recipe){
+        for(int i = 0; i < inventory.size(); i++){
+            double current = inventory.get(i).getAmount();
+            inventory.get(i).setAmount(current - 1.0);
+        }
     }
 }

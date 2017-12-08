@@ -161,6 +161,13 @@
     -fx-text-alignment: center;
 }
 
+.Instructions-text {
+    -fx-font-size: 20pt;
+    -fx-max-height: 1000px;
+    -fx-min-height: 200px;
+
+}
+
 .instructions-header-overlay {
     -fx-background-color: black;
     -fx-min-height: 200px;

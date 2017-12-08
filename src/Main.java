@@ -135,7 +135,7 @@ public class Main extends Application{
 
         mainApp.setTop(ui.getMenuBar()); // draw top menu bar
 
-        ui.getRecipesPage("1");
+
 
         mainApp.setCenter(ui.getInventoryPage()); // draw inventory display, pass it the inventory arrayList
 
