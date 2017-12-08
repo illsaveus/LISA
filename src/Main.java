@@ -33,6 +33,7 @@ public class Main extends Application{
 
     //this method returns an arrayList with all the items in the users inventory
     //this is a temporary method and should be deleted after the proper methods are included
+    /*
     public ArrayList<Ingredient> getInventory(){
         ArrayList<Ingredient> itemList = new ArrayList<Ingredient>();
 
@@ -63,7 +64,9 @@ public class Main extends Application{
 
         return itemList;
     }
+    */
 
+    /*
     //Temporary method that will return a list of recipes to display in RecipesPage
     public ArrayList<Recipe> getRecipes() {
         ArrayList<Ingredient> ingredients = getInventory();
@@ -101,6 +104,7 @@ public class Main extends Application{
 
         return recipeList;
     }
+    */
 
     @Override
     public void start (Stage primaryStage) {
@@ -108,8 +112,14 @@ public class Main extends Application{
         window.setTitle("LISA Cooks");
 
         //grab inventory and put it in an arrayList I can use
-        ArrayList<Ingredient> inventoryList = getInventory();
-        ArrayList<Recipe> recipeList = getRecipes();
+        //ArrayList<Ingredient> inventoryList = getInventory();
+
+
+        //inventoryList = inventory.getInventory();
+        Inventory inventory = new Inventory();
+
+
+
 
 
         //****DRAW UI****//
@@ -119,13 +129,13 @@ public class Main extends Application{
 
 
         //create a LisaUI object - this is the entire app UI - send it the size of the entire app and the main layout
-        LisaUI ui = new LisaUI(recipeList, inventoryList, mainApp, window_h, window_w);
+        LisaUI ui = new LisaUI(inventory, mainApp, window_h, window_w);
 
 
 
         mainApp.setTop(ui.getMenuBar()); // draw top menu bar
 
-        ui.getRecipesPage("breakfast");
+        ui.getRecipesPage("1");
 
         mainApp.setCenter(ui.getInventoryPage()); // draw inventory display, pass it the inventory arrayList
 

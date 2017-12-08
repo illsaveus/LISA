@@ -18,6 +18,8 @@ import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.lang.reflect.Array;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 
 public class LisaUI {
@@ -34,6 +36,13 @@ public class LisaUI {
     private BorderPane window;
     private ArrayList<Recipe> recipes;
     private ArrayList<Ingredient> inventory;
+    private Inventory kInventory;
+
+    private Connection conn;
+    public static String network = "192.185.5.33:3306";
+    public static String username = "eendy89_user";
+    public static String network_name = "eendy89_cs56";
+    public static String password = "lisalisa";
 
     //default height and width of app
     LisaUI(){
@@ -42,12 +51,18 @@ public class LisaUI {
     }
 
     //takes in the height and width you want the app to be
-    LisaUI(ArrayList<Recipe> r, ArrayList<Ingredient> i, BorderPane win, int height, int width){
+    LisaUI(Inventory inventory, BorderPane win, int height, int width){
+
         this.h = height;
         this.w = width;
         this.window = win;
-        this.recipes = r;
-        this.inventory = i;
+
+
+        this.kInventory = inventory;
+        this.conn = kInventory.connectToServer(network, username, password);
+        this.inventory = kInventory.getInventory(conn);
+
+
 
         //Create buttons
         inventoryBtn = new Button();
@@ -85,6 +100,7 @@ public class LisaUI {
 
     //This method returns the inventoryPage layout UI with all the inventory objects added to it
     public VBox getInventoryPage(){
+
         ArrayList<Ingredient> items = inventory;
 
         int length = items.size(); //get size of arrayList
@@ -160,6 +176,8 @@ public class LisaUI {
     //This method returns the recipePage layout UI with all the inventory objects added to it
     //It takes an ArrayList of recipes and a String of mealType to filter results with
     public VBox getRecipesPage(String userChoice){
+
+        recipes = kInventory.getRecipes(conn, "1");
         int length = recipes.size(); //get size of arrayList
 
         recipesPage = new VBox(); //create a layout for the inventory UI
