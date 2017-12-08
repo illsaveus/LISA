@@ -36,7 +36,7 @@ public class LisaUI {
     private BorderPane window;
     private ArrayList<Recipe> recipes;
     private ArrayList<Ingredient> inventory;
-    private Inventory kInventory;
+    private Inventory inventoryClass;
 
     private Connection conn;
     public static String network = "192.185.5.33:3306";
@@ -58,10 +58,10 @@ public class LisaUI {
         this.window = win;
 
 
-        this.kInventory = inventory;
-        this.conn = kInventory.connectToServer(network, username, password);
-        this.inventory = kInventory.getInventory(conn);
+        this.inventoryClass = inventory;
 
+
+        this.inventory = inventoryClass.getInventory();
 
 
         //Create buttons
@@ -117,7 +117,7 @@ public class LisaUI {
             itemName.getStyleClass().add("header-item");
 
             //Ingredient Amount
-            String amountInStock = Double.toString(items.get(i).getAmount()) + " " + items.get(i).getUnit();
+            String amountInStock = Double.toString(items.get(i).getMin()) + " " + items.get(i).getMeasuringType();
             Label itemAmount = new Label(amountInStock);
             itemAmount.getStyleClass().add("header-item");
 
@@ -165,22 +165,22 @@ public class LisaUI {
         double width = window.getScaleY();
         System.out.println(width);
 
-        return  (item.getAmount() / item.getMax()) * width;
+        return  (item.getMin() / item.getMax()) * width;
     }
 
     double getProgress(Ingredient item, int width){
 
-        return  (item.getAmount() / item.getMax()) * width;
+        return  (item.getMin() / item.getMax()) * width;
     }
 
     //This method returns the recipePage layout UI with all the inventory objects added to it
     //It takes an ArrayList of recipes and a String of mealType to filter results with
     public VBox getRecipesPage(String userChoice){
-
-        recipes = kInventory.getRecipes(conn, "1");
+        recipesPage = new VBox(); //create a layout for the inventory UI
+        /*
+        recipes = inventoryClass.getRecipes(conn, "1");
         int length = recipes.size(); //get size of arrayList
 
-        recipesPage = new VBox(); //create a layout for the inventory UI
 
         //loop through the arrayList to add objects to the layout
         for(int i = 0; i < length; i++){
@@ -274,7 +274,7 @@ public class LisaUI {
 
 
         recipesPage.setPadding(new Insets (20, 35, 20, 35));
-
+*/
 
         return recipesPage;
     }
@@ -548,7 +548,7 @@ public class LisaUI {
                 Label itemName = new Label(items.get(i).getName());
                 itemName.getStyleClass().add("ingredient-items");
 
-                String amountInStock = Double.toString(items.get(i).getAmount()) + " " + items.get(i).getUnit();
+                String amountInStock = Double.toString(items.get(i).getMin()) + " " + items.get(i).getMeasuringType();
                 Label itemAmount = new Label(amountInStock);
                 itemAmount.getStyleClass().add("ingredient-items");
 

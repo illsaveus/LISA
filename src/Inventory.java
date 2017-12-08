@@ -1,115 +1,75 @@
-
 import java.sql.*;
-
 import java.util.ArrayList;
 
-public class Inventory {
+class Inventory{
+    public ArrayList<Ingredient> itemlist = new ArrayList<Ingredient>();
 
-    public static Connection connectToServer(String username, String password) {
-        Connection conn = null;
+    public static void main(String[] args) {
+        Inventory new2 = new Inventory();
+        ArrayList<Ingredient> loop = new2.getInventory();
 
-        try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost/?" +
-                    "user=" + username + "&password=" + password);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+//                loop array
+        for (Ingredient g: loop) {
+            System.out.println(g.getName());
+            System.out.println(g.getType());
+            System.out.println(g.getMin());
+            System.out.println(g.getMax());
         }
-
-        return conn;
     }
 
-    public static Connection connectToServer(String network, String username, String password) {
-        Connection conn = null;
 
+    Inventory(){
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://" + network, username, password);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
 
-        return conn;
-    }
+            Class.forName("com.mysql.jdbc.Driver");
 
-    public static ArrayList<Recipe> getRecipes(Connection conn, String mealType) {
-        ArrayList<Recipe> recipes = new ArrayList<>();
-        String sqlQuery = "select Recipe.index, Recipe.name, Recipe.meal_type from Recipe where meal_type = ?;";
-        int mType = Integer.parseInt(mealType);
+//            initialize vars
 
-        PreparedStatement getRcps = null;
+            String query = null;
+            PreparedStatement statement = null;
+            ResultSet result = null;
+            Statement stm;
+            Boolean action = false;
 
-        try {
-            getRcps = conn.prepareStatement(sqlQuery);
-            getRcps.setInt(1, mType);
+//        Connect
+            Connection connection = DriverManager.getConnection("jdbc:mysql://192.185.5.33:3306/eendy89_cs56", "eendy89_user", "lisalisa");
 
-            ResultSet rs = getRcps.executeQuery();
+//        Set query
+            query = "select * from Inventory";
 
-            while (rs.next()) {
+//        create prepared statement
+            stm = connection.createStatement();
 
-                String ingQuery = "select ingredient.name, ingredient_type.type, inventory.quantity, inventory.max_quantity\n" +
-                        "  from ((ingredient inner join ingredient_type on ingredient.type = ingredient_type.index)\n" +
-                        "    inner join inventory on ingredient.name = inventory.name)\n" +
-                        "    inner join needed_ingredients on ingredient.name = needed_ingredients.ingredient\n" +
-                        "    where Recipe = ?;";
 
-                int rcpID = rs.getInt("recipe_id");
-                PreparedStatement getIngs = conn.prepareStatement(ingQuery);
-                getIngs.setInt(1, rcpID);
-                ResultSet rsI = getIngs.executeQuery();
-                ArrayList<Ingredient> ings = new ArrayList<>();
 
-                while (rsI.next()) {
-                    Ingredient ing = new Ingredient(rs.getString("ingredient.name"),
-                            rs.getString("ingredient_type.type"),
-                            rs.getDouble("inventory.quantity"),
-                            rs.getDouble("inventory.max_quantity"));
-                    ings.add(ing);
-                }
 
-                String rcpName = rs.getString("Recipe.name");
-                Recipe rcp = new Recipe(rcpName, "", mealType);
-                rcp.addIngredients(ings);
+//        Execute statement
+            result = stm.executeQuery(query);
 
-                recipes.add(rcp);
+
+            while(result.next()){
+                String name = result.getString("Name");
+                Double min = result.getDouble("Quantity");
+                Double max = result.getDouble("Max_Quantity");
+                Integer type = 1;
+                Ingredient item = new Ingredient(name,type,min,max);
+                itemlist.add(item);
             }
 
-        } catch (SQLException ex) {
+
+
+
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-        return recipes;
+
     }
 
-    void updateInventory(String recipeID, Connection conn) {
-        int rID = Integer.parseInt(recipeID);
-        String sqlQuery = "update fridge";
+
+    public  ArrayList<Ingredient> getInventory(){
+        return itemlist;
+
     }
 
-    public static ArrayList<Ingredient> getInventory(Connection conn) {
-        ArrayList<Ingredient> ingredients = new ArrayList<>();
-
-        String sqlQuery = "select ingredient.name, ingredient_type.type, inventory.quantity, inventory.max_quantity\n" +
-                "  from (ingredient inner join ingredient_type on ingredient.type = ingredient_type.index)\n" +
-                "    inner join inventory on ingredient.name = inventory.name;";
-
-        PreparedStatement getIngs = null;
-
-        try {
-            getIngs = conn.prepareStatement(sqlQuery);
-            ResultSet rs = getIngs.executeQuery();
-
-            while (rs.next()) {
-                Ingredient ing = new Ingredient(rs.getString("ingredient.name"),
-                        rs.getString("ingredient_type.type"),
-                        rs.getDouble("inventory.quantity"),
-                        rs.getDouble("inventory.max_quantity"));
-
-                ingredients.add(ing);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return ingredients;
-    }
 }

@@ -25,11 +25,7 @@ public class Database{
             ResultSet myResult = myStmt.executeQuery("select * from `" + network_name + "`.`Ingredient`");
 
             while (myResult.next()){
-                ing = new Ingredient(myResult.getString("Name"),
-                        myResult.getString("Type"),
-                        myResult.getString("Measuring_type"),
-                        myResult.getDouble("qty"),
-                        myResult.getDouble("max_qty"));
+                ing = new Ingredient();
                 System.out.println(ing.toString());
                 inventory.add(ing);
             }
