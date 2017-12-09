@@ -74,7 +74,7 @@ public class LisaUI {
 
     void inventoryBtnClicked (){
 
-        window.setCenter(inventoryPage);
+        window.setCenter(getInventoryPage());
         inventoryBtn.setId("inventory-open");
         recipesBtn.setId("recipes-closed");
     }
@@ -615,9 +615,18 @@ public class LisaUI {
     }
 
     void updateInventory(Recipe recipe){
-        for(int i = 0; i < inventory.size(); i++){
-            double current = inventory.get(i).getAmount();
-            inventory.get(i).setAmount(current - 1.0);
+
+        for(Ingredient item : recipe.getIngredients()) {
+            System.out.println(item.getName());
+            for (int i = 0; i < inventory.size(); i++) {
+                //System.out.println(inventory.get(i).getName());
+                if (item.getName().equals(inventory.get(i).getName())) {
+                    double current = inventory.get(i).getAmount();
+                    inventory.get(i).setAmount(current - 1.0);
+                    System.out.print("Updated value for inventory : " + inventory.get(i).getName());
+                }
+
+            }
         }
     }
 }

@@ -148,7 +148,7 @@ public class Main extends Application{
         //Create and init the home scenew
         homeScene = new Scene(scrollingWindow, window_w, window_h);
         //homeScene.getStylesheets().add("LisaUI.css");
-        scrollingWindow.getStylesheets().add("LisaUI.css");
+        scrollingWindow.getStylesheets().add(getClass().getClassLoader().getResource("LisaUI.css").toExternalForm());
         window.setScene(homeScene);
         window.show();
 
